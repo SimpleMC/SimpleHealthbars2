@@ -1,7 +1,9 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.3.11"
+    id("com.github.johnrengelman.shadow") version "4.0.3"
 }
 
 group = "org.simplemc"
@@ -14,10 +16,22 @@ repositories {
 }
 
 dependencies {
-    api(kotlin("stdlib-jdk8"))
-    implementation(group = "org.spigotmc", name = "spigot-api", version = "1.13+")
+    implementation(kotlin("stdlib-jdk8"))
+    compileOnly(group = "org.spigotmc", name = "spigot-api", version = "1.13+")
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+tasks {
+    withType<KotlinCompile> {
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
+
+    withType<ShadowJar> {
+        minimize()
+    }
+
+    named("build") {
+        dependsOn(":shadowJar")
+    }
 }
