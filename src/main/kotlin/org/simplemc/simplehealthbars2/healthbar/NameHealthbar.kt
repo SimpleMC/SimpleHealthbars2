@@ -2,39 +2,32 @@ package org.simplemc.simplehealthbars2.healthbar
 
 import org.bukkit.ChatColor
 import org.bukkit.entity.LivingEntity
-import org.simplemc.simplehealthbars2.getDisplayName
-import org.simplemc.simplehealthbars2.getHealthRatio
+import org.bukkit.entity.Player
+import org.simplemc.simplehealthbars2.getCustomDisplayName
+import org.simplemc.simplehealthbars2.getDamagedHealth
+import org.simplemc.simplehealthbars2.getDamagedHealthRatio
+import org.simplemc.simplehealthbars2.setCustomDisplayName
 
 class NameHealthbar(private val config: Config) : Healthbar {
     data class Config(
         val style: Healthbar.Style = Healthbar.Style.BAR,
-        val length: Int = 10,
+        val length: Int = 20,
         val char: Char = 0x25ae.toChar(),
         val showMobNames: Boolean = true
     )
 
     private val step = config.char.toString()
 
-    override fun updateHealth(target: LivingEntity): (() -> Unit)? {
+    override fun updateHealth(target: LivingEntity, damage: Double): (() -> Unit)? {
         val hadCustomName = target.isCustomNameVisible
-        val oldName = target.getDisplayName()
+        val oldName = target.getCustomDisplayName()
 
-        var health = when (config.style) {
-            Healthbar.Style.ABSOLUTE -> healthAmount(Math.ceil(target.health).toInt())
-            Healthbar.Style.RATIO -> healthAmount(Math.ceil(target.getHealthRatio() * 100).toInt())
-            Healthbar.Style.BAR -> healthBar(Math.ceil(target.getHealthRatio() * config.length).toInt())
-        }
-
-        if (config.showMobNames) {
-            health = "$oldName ${ChatColor.WHITE}[$health${ChatColor.WHITE}]"
-        }
-
-        target.customName = health
+        target.setCustomDisplayName(formatHealthbar(target, oldName, damage))
         target.isCustomNameVisible = true
 
         return {
             if (hadCustomName) {
-                target.customName = oldName
+                target.setCustomDisplayName(oldName)
             } else {
                 target.isCustomNameVisible = false
                 target.customName = null
@@ -42,8 +35,25 @@ class NameHealthbar(private val config: Config) : Healthbar {
         }
     }
 
-    private fun healthBar(healthyAmount: Int): String =
-        "${ChatColor.DARK_GREEN}${step.repeat(healthyAmount)}${ChatColor.DARK_RED}${step.repeat(config.length - healthyAmount)}"
+    private fun formatHealthbar(target: LivingEntity, oldName: String, damage: Double): String {
+        var health = when (config.style) {
+            Healthbar.Style.ABSOLUTE -> healthAmount(Math.ceil(target.getDamagedHealth(damage)).toInt())
+            Healthbar.Style.RATIO -> healthAmount(Math.ceil(target.getDamagedHealthRatio(damage) * 100).toInt())
+            Healthbar.Style.BAR -> healthBar(Math.ceil(target.getDamagedHealthRatio(damage) * config.length).toInt())
+        }
 
-    private fun healthAmount(amount: Int): String = "${ChatColor.WHITE}$amount ${ChatColor.RED}${0x2665.toChar()}"
+        if (target is Player || config.showMobNames) {
+            health = "$oldName $health"
+        }
+
+        return health
+    }
+
+    private fun healthBar(healthyAmount: Int): String {
+        val health = step.repeat(healthyAmount)
+        val missing = step.repeat(config.length - healthyAmount)
+        return "${ChatColor.WHITE}[${ChatColor.DARK_GREEN}$health${ChatColor.DARK_RED}$missing${ChatColor.WHITE}]"
+    }
+
+    private fun healthAmount(amount: Int): String = "${ChatColor.WHITE}$amount ${ChatColor.RED}${0x2764.toChar()}"
 }
