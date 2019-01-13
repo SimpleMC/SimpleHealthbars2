@@ -41,7 +41,7 @@ class ScoreboardHealthbar(private val config: Config) : PlayerHealthbar {
             target.scoreboard = objective.scoreboard
 
             if (config.style == Healthbar.Style.PERCENT) {
-                objective.getScore(target.uniqueId.toString()).score =
+                objective.getScore(target.name).score =
                         Math.ceil(target.getDamagedHealthRatio(damage) * 100).toInt()
             }
 
