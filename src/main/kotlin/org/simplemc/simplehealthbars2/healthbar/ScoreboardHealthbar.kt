@@ -9,7 +9,7 @@ import org.bukkit.scoreboard.RenderType
 import org.simplemc.simplehealthbars2.getDamagedHealth
 import org.simplemc.simplehealthbars2.getDamagedHealthRatio
 
-class ScoreboardHealthbar(private val config: Config) : Healthbar {
+class ScoreboardHealthbar(private val config: Config) : PlayerHealthbar {
     data class Config(val style: Healthbar.Style = Healthbar.Style.BAR, val length: Int = 20)
 
     private val objective =
@@ -19,7 +19,7 @@ class ScoreboardHealthbar(private val config: Config) : Healthbar {
         objective.displaySlot = DisplaySlot.BELOW_NAME
 
         when (config.style) {
-            Healthbar.Style.ABSOLUTE, Healthbar.Style.RATIO -> {
+            Healthbar.Style.ABSOLUTE, Healthbar.Style.PERCENT -> {
                 objective.displayName = "${ChatColor.RED}${0x2764.toChar()}"
                 objective.renderType = RenderType.INTEGER
             }
@@ -32,7 +32,7 @@ class ScoreboardHealthbar(private val config: Config) : Healthbar {
             val oldScoreboard = target.scoreboard
             objective.getScore(target.uniqueId.toString()).score = when (config.style) {
                 Healthbar.Style.ABSOLUTE -> Math.ceil(target.getDamagedHealth(damage)).toInt()
-                Healthbar.Style.RATIO -> Math.ceil(target.getDamagedHealthRatio(damage) * 100).toInt()
+                Healthbar.Style.PERCENT -> Math.ceil(target.getDamagedHealthRatio(damage) * 100).toInt()
                 Healthbar.Style.BAR -> Math.ceil(target.getDamagedHealthRatio(damage) * config.length).toInt()
             }
             target.scoreboard = objective.scoreboard

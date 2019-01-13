@@ -3,8 +3,8 @@ package org.simplemc.simplehealthbars2.healthbar
 import org.bukkit.entity.LivingEntity
 
 interface Healthbar {
-    enum class Type { NAME, SCOREBOARD }
-    enum class Style { ABSOLUTE, RATIO, BAR }
+    enum class Type { NAME, SCOREBOARD, NONE }
+    enum class Style { ABSOLUTE, PERCENT, BAR }
 
     /**
      * Update target's healthbar with latest health
@@ -16,3 +16,7 @@ interface Healthbar {
      */
     fun updateHealth(target: LivingEntity, damage: Double): (() -> Unit)?
 }
+
+interface PlayerHealthbar : Healthbar
+
+interface MobHealthbar : Healthbar
