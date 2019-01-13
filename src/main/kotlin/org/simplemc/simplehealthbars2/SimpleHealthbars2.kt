@@ -12,16 +12,20 @@ import org.simplemc.simplehealthbars2.healthbar.ScoreboardHealthbar
  * SimpleHealthbars2 plugin
  */
 class SimpleHealthbars2 : JavaPlugin() {
+    private lateinit var listener: DamageListener
+
     override fun onEnable() {
         // ensure config file exists
         saveDefaultConfig()
 
+        listener = DamageListener(
+            this,
+            loadBar(config.getConfigurationSection("player-bar")) as PlayerHealthbar?,
+            loadBar(config.getConfigurationSection("mob-bar")) as MobHealthbar?
+        )
+
         server.pluginManager.registerEvents(
-            DamageListener(
-                this,
-                loadBar(config.getConfigurationSection("player-bar")) as PlayerHealthbar?,
-                loadBar(config.getConfigurationSection("mob-bar")) as MobHealthbar?
-            ),
+            listener,
             this
         )
 
@@ -46,5 +50,8 @@ class SimpleHealthbars2 : JavaPlugin() {
             Healthbar.Type.NONE -> null
         }
 
-    override fun onDisable() = logger.info("${description.name} disabled.")
+    override fun onDisable() {
+        listener.close()
+        logger.info("${description.name} disabled.")
+    }
 }

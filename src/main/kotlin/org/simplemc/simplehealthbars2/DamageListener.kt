@@ -17,7 +17,7 @@ class DamageListener(
     private val plugin: Plugin,
     private val playerHealthbar: PlayerHealthbar?,
     private val mobHealthbar: MobHealthbar?
-) : Listener {
+) : Listener, AutoCloseable {
     private data class RemoveHealthbarTask(val taskId: Int, val task: () -> Unit)
 
     private val scheduler = Bukkit.getScheduler()
@@ -41,5 +41,9 @@ class DamageListener(
             val taskId = scheduler.scheduleSyncDelayedTask(plugin, it, 100)
             removeHealthbarTasks[target.uniqueId] = RemoveHealthbarTask(taskId, it)
         }
+    }
+
+    override fun close() {
+        removeHealthbarTasks.mapNotNull { (_, removeTask) -> removeTask?.task }.forEach { it() }
     }
 }
