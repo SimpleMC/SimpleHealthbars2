@@ -2,8 +2,7 @@
 ######################
 player-bar:          # bar to show for player damage
   type: SCOREBOARD   # one of SCOREBOARD, NONE
-  style: BAR         # one of ABSOLUTE, PERCENT, BAR
-  length: 20         # length of BAR
+  style: ABSOLUTE    # one of ABSOLUTE, PERCENT
 
 # Healthbar to show for mobs
 ######################

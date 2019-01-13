@@ -40,8 +40,7 @@ class SimpleHealthbars2 : JavaPlugin() {
             )
             Healthbar.Type.SCOREBOARD -> ScoreboardHealthbar(
                 ScoreboardHealthbar.Config(
-                    style = Healthbar.Style.valueOf(config.getString("style", "BAR")),
-                    length = config.getInt("length", 20)
+                    style = Healthbar.Style.valueOf(config.getString("style", "ABSOLUTE"))
                 )
             )
             Healthbar.Type.NONE -> null
