@@ -1,14 +1,11 @@
-# Healthbar to show for players
-######################
-player-bar:          # bar to show for player damage
-  type: SCOREBOARD   # one of SCOREBOARD, NONE
-  style: ABSOLUTE    # one of ABSOLUTE, PERCENT
 
-# Healthbar to show for mobs
-######################
-mob-bar:             # bar to show for mob damage
-  type: NAME         # one of NAME, NONE
-  style: BAR         # valid options: ABSOLUTE, PERCENT, BAR
-  length: 20         # length of BAR
-  char: 0x25ae       # unicode int to use for BAR, default to solid rectangle
-  showMobNames: true # always show mob names? false to only include custom names
+player-bar:
+  type: SCOREBOARD
+  style: ABSOLUTE
+
+mob-bar:
+  type: NAME
+  style: BAR
+  length: 20
+  char: 0x25ae
+  showMobNames: true

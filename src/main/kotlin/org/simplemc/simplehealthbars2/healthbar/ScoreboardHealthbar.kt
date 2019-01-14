@@ -35,7 +35,7 @@ class ScoreboardHealthbar(private val config: Config) : PlayerHealthbar {
         objective.displaySlot = DisplaySlot.BELOW_NAME
     }
 
-    override fun updateHealth(target: LivingEntity, damage: Double): (() -> Unit)? {
+    override fun updateHealth(source: LivingEntity?, target: LivingEntity, damage: Double): (() -> Unit)? {
         if (target is Player) {
             val oldScoreboard = target.scoreboard
             target.scoreboard = objective.scoreboard

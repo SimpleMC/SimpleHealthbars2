@@ -6,6 +6,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
+import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.plugin.Plugin
 import org.simplemc.simplehealthbars2.healthbar.Healthbar
@@ -24,11 +25,18 @@ class DamageListener(
     private val removeHealthbarTasks: MutableMap<UUID, RemoveHealthbarTask?> = mutableMapOf()
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    fun onEntityDamageEvent(event: EntityDamageEvent) {
+    fun onEntityDamageEvent(event: EntityDamageByEntityEvent) {
         val target = event.entity as? LivingEntity ?: return
+        val source = event.damager as? LivingEntity
 
+        // put source and target healthbars
+        healthbar(source, target, event.damage)
+        source?.let { healthbar(target, it, 0.0) }
+    }
+
+    private fun healthbar(source: LivingEntity?, target: LivingEntity, damage: Double) {
         // cancel scheduled healthbar removal and run it now to prepare for new (updated) healthbar
-        removeHealthbarTasks[event.entity.uniqueId]?.let {
+        removeHealthbarTasks[target.uniqueId]?.let {
             scheduler.cancelTask(it.taskId)
             it.task()
         }
@@ -37,7 +45,7 @@ class DamageListener(
         when (target) {
             is Player -> playerHealthbar
             else -> mobHealthbar
-        }?.updateHealth(target, event.damage)?.let {
+        }?.updateHealth(source, target, damage)?.let {
             val taskId = scheduler.scheduleSyncDelayedTask(plugin, it, 100)
             removeHealthbarTasks[target.uniqueId] = RemoveHealthbarTask(taskId, it)
         }
