@@ -51,7 +51,12 @@ class DamageListener(
         }
     }
 
+    /**
+     * Remember to remove all healthbars on close
+     */
     override fun close() {
-        removeHealthbarTasks.mapNotNull { (_, removeTask) -> removeTask?.task }.forEach { it() }
+        removeHealthbarTasks
+            .mapNotNull { (_, removeTask) -> removeTask?.task }
+            .forEach { it() }
     }
 }
