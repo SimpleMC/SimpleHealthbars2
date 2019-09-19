@@ -22,8 +22,8 @@ class SimpleHealthbars2 : JavaPlugin() {
 
         listener = DamageListener(
             this,
-            loadBar(config.getConfigurationSection("player-bar")) as PlayerHealthbar?,
-            loadBar(config.getConfigurationSection("mob-bar")) as MobHealthbar?
+            config.getConfigurationSection("player-bar")?.let { loadBar(it) } as PlayerHealthbar?,
+            config.getConfigurationSection("mob-bar")?.let { loadBar(it) } as MobHealthbar?
         )
 
         server.pluginManager.registerEvents(
@@ -35,17 +35,19 @@ class SimpleHealthbars2 : JavaPlugin() {
     }
 
     private fun loadBar(config: ConfigurationSection) =
-        when(Healthbar.Type.valueOf(config.getString("type"))) {
+        when(Healthbar.Type.valueOf(checkNotNull(config.getString("type")))) {
             Healthbar.Type.NAME -> NameHealthbar(loadStringBar(config))
             Healthbar.Type.ACTION -> ActionHealthbar(loadStringBar(config))
             Healthbar.Type.SCOREBOARD -> ScoreboardHealthbar(
-                ScoreboardHealthbar.Config(style = Healthbar.Style.valueOf(config.getString("style", "ABSOLUTE")))
+                ScoreboardHealthbar.Config(
+                    style = Healthbar.Style.valueOf(checkNotNull(config.getString("style", "ABSOLUTE")))
+                )
             )
             Healthbar.Type.NONE -> null
         }
 
     private fun loadStringBar(config: ConfigurationSection) = StringHealthbar.Config(
-        style = Healthbar.Style.valueOf(config.getString("style", "BAR")),
+        style = Healthbar.Style.valueOf(checkNotNull(config.getString("style", "BAR"))),
         length = config.getInt("length", 20),
         char = config.getInt("char", 0x25ae).toChar(),
         showMobNames = config.getBoolean("showMobNames", true)
