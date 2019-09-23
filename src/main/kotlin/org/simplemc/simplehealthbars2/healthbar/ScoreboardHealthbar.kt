@@ -15,14 +15,15 @@ class ScoreboardHealthbar(private val config: Config) : PlayerHealthbar {
     private val objective: Objective
 
     init {
+        val scoreboardManager = checkNotNull(Bukkit.getScoreboardManager())
         objective = when (config.style) {
-            Healthbar.Style.ABSOLUTE -> Bukkit.getScoreboardManager().newScoreboard.registerNewObjective(
+            Healthbar.Style.ABSOLUTE -> scoreboardManager.newScoreboard.registerNewObjective(
                 "healthbar",
                 "health",
                 "",
                 RenderType.HEARTS
             )
-            Healthbar.Style.PERCENT -> Bukkit.getScoreboardManager().newScoreboard.registerNewObjective(
+            Healthbar.Style.PERCENT -> scoreboardManager.newScoreboard.registerNewObjective(
                 "healthbar",
                 "dummy",
                 "${ChatColor.RED}${0x2764.toChar()}",
@@ -38,7 +39,7 @@ class ScoreboardHealthbar(private val config: Config) : PlayerHealthbar {
     override fun updateHealth(source: LivingEntity?, target: LivingEntity, damage: Double): (() -> Unit)? {
         if (target is Player) {
             val oldScoreboard = target.scoreboard
-            target.scoreboard = objective.scoreboard
+            target.scoreboard = checkNotNull(objective.scoreboard)
 
             if (config.style == Healthbar.Style.PERCENT) {
                 objective.getScore(target.name).score =
