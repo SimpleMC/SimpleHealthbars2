@@ -8,6 +8,7 @@ import org.bukkit.scoreboard.DisplaySlot
 import org.bukkit.scoreboard.Objective
 import org.bukkit.scoreboard.RenderType
 import org.simplemc.simplehealthbars2.getDamagedHealthRatio
+import kotlin.math.ceil
 
 class ScoreboardHealthbar(private val config: Config) : PlayerHealthbar {
     data class Config(val style: Healthbar.Style = Healthbar.Style.ABSOLUTE)
@@ -20,7 +21,7 @@ class ScoreboardHealthbar(private val config: Config) : PlayerHealthbar {
             Healthbar.Style.ABSOLUTE -> scoreboardManager.newScoreboard.registerNewObjective(
                 "healthbar",
                 "health",
-                "",
+                "${ChatColor.RED}${0x2764.toChar()}",
                 RenderType.HEARTS
             )
             Healthbar.Style.PERCENT -> scoreboardManager.newScoreboard.registerNewObjective(
@@ -43,7 +44,7 @@ class ScoreboardHealthbar(private val config: Config) : PlayerHealthbar {
 
             if (config.style == Healthbar.Style.PERCENT) {
                 objective.getScore(target.name).score =
-                        Math.ceil(target.getDamagedHealthRatio(damage) * 100).toInt()
+                        ceil(target.getDamagedHealthRatio(damage) * 100).toInt()
             }
 
             return { target.scoreboard = oldScoreboard }
