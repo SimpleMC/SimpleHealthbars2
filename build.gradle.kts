@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "org.simplemc"
-version = "1.14-SNAPSHOT"
+version = "1.15-SNAPSHOT"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
@@ -22,7 +22,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    compileOnly(group = "org.spigotmc", name = "spigot-api", version = "1.14+")
+    compileOnly(group = "org.spigotmc", name = "spigot-api", version = "1.15+")
 }
 
 tasks {
