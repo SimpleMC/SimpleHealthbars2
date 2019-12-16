@@ -35,7 +35,7 @@ class SimpleHealthbars2 : JavaPlugin() {
     }
 
     private fun loadBar(config: ConfigurationSection) =
-        when(Healthbar.Type.valueOf(checkNotNull(config.getString("type")))) {
+        when (Healthbar.Type.valueOf(checkNotNull(config.getString("type")))) {
             Healthbar.Type.NAME -> NameHealthbar(loadStringBar(config))
             Healthbar.Type.ACTION -> ActionHealthbar(loadStringBar(config))
             Healthbar.Type.SCOREBOARD -> ScoreboardHealthbar(

@@ -7,9 +7,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
-import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.plugin.Plugin
-import org.simplemc.simplehealthbars2.healthbar.Healthbar
 import org.simplemc.simplehealthbars2.healthbar.MobHealthbar
 import org.simplemc.simplehealthbars2.healthbar.PlayerHealthbar
 import java.util.UUID
