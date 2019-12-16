@@ -7,6 +7,7 @@ plugins {
     kotlin("jvm") version "1.3.61"
     id("com.github.johnrengelman.shadow") version "5.1.0"
     id("pl.allegro.tech.build.axion-release") version "1.10.2"
+    id("org.jlleitschuh.gradle.ktlint") version "9.1.1"
 }
 
 val mcApiVersion = "1.15"
@@ -42,6 +43,11 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     compileOnly(group = "org.spigotmc", name = "spigot-api", version = "$mcApiVersion+")
+}
+
+ktlint {
+    // FIXME - ktlint bug(?): https://github.com/pinterest/ktlint/issues/527
+    disabledRules.set(listOf("import-ordering"))
 }
 
 tasks {
