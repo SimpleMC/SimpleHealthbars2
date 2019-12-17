@@ -2,6 +2,9 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import pl.allegro.tech.build.axion.release.domain.hooks.HookContext
 import pl.allegro.tech.build.axion.release.domain.hooks.HooksConfig
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 
 plugins {
     kotlin("jvm") version "1.3.61"
@@ -25,9 +28,29 @@ scmVersion {
                 "replacement" to KotlinClosure2<String, HookContext, String>({ v, _ -> "version: $v\napi-version: \"$mcApiVersion\"" })
             )
         )
+        pre(
+            "fileUpdate",
+            mapOf(
+                "file" to "CHANGELOG.md",
+                "pattern" to KotlinClosure2<String, HookContext, String>({ v, _ ->
+                    "\\[Unreleased\\]([\\s\\S]+?)\\n(?:^\\[Unreleased\\]: https:\\/\\/github\\.com\\/SimpleMC\\/SimpleHealthbars2\\/compare\\/release-$v...HEAD\$([\\s\\S]*))?The format is based on"
+                }),
+                "replacement" to KotlinClosure2<String, HookContext, String>({ v, c ->
+                    """
+                        \[Unreleased\]
+                        
+                        ## \[$v\] - ${currentDateString()}$1
+                        \[Unreleased\]: https:\/\/github\.com\/SimpleMC\/SimpleHealthbars2\/compare\/release-$v...HEAD
+                        \[$v\]:  https:\/\/github\.com\/SimpleMC\/SimpleHealthbars2\/compare\/release-${c.previousVersion}...release-$v$2The format is based on
+                    """.trimIndent()
+                })
+            )
+        )
         pre("commit")
     })
 }
+
+fun currentDateString() = OffsetDateTime.now(ZoneOffset.UTC).toLocalDate().format(DateTimeFormatter.ISO_DATE)
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
