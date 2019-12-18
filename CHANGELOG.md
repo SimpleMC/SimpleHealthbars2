@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Release workflow to add a draft GH release on tag
 
 ## [0.1.0] - 2019-12-18
 ### Added
