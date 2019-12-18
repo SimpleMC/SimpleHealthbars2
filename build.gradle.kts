@@ -41,7 +41,7 @@ scmVersion {
                         
                         ## \[$v\] - ${currentDateString()}$1
                         \[Unreleased\]: https:\/\/github\.com\/SimpleMC\/SimpleHealthbars2\/compare\/release-$v...HEAD
-                        \[$v\]:  https:\/\/github\.com\/SimpleMC\/SimpleHealthbars2\/compare\/release-${c.previousVersion}...release-$v$2
+                        \[$v\]: https:\/\/github\.com\/SimpleMC\/SimpleHealthbars2\/compare\/release-${c.previousVersion}...release-$v$2
                     """.trimIndent()
                 })
             )
