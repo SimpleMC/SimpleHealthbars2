@@ -33,7 +33,7 @@ scmVersion {
             mapOf(
                 "file" to "CHANGELOG.md",
                 "pattern" to KotlinClosure2<String, HookContext, String>({ v, _ ->
-                    "\\[Unreleased\\]([\\s\\S]+?)\\n(?:^\\[Unreleased\\]: https:\\/\\/github\\.com\\/SimpleMC\\/SimpleHealthbars2\\/compare\\/release-$v...HEAD\$([\\s\\S]*))?The format is based on"
+                    "\\[Unreleased\\]([\\s\\S]+?)\\n(?:^\\[Unreleased\\]: https:\\/\\/github\\.com\\/SimpleMC\\/SimpleHealthbars2\\/compare\\/release-$v\\.\\.\\.HEAD\$([\\s\\S]*))?\\z"
                 }),
                 "replacement" to KotlinClosure2<String, HookContext, String>({ v, c ->
                     """
@@ -41,7 +41,7 @@ scmVersion {
                         
                         ## \[$v\] - ${currentDateString()}$1
                         \[Unreleased\]: https:\/\/github\.com\/SimpleMC\/SimpleHealthbars2\/compare\/release-$v...HEAD
-                        \[$v\]:  https:\/\/github\.com\/SimpleMC\/SimpleHealthbars2\/compare\/release-${c.previousVersion}...release-$v$2The format is based on
+                        \[$v\]:  https:\/\/github\.com\/SimpleMC\/SimpleHealthbars2\/compare\/release-${c.previousVersion}...release-$v$2
                     """.trimIndent()
                 })
             )
