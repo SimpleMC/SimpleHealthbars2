@@ -18,7 +18,7 @@ jobs:
         with:
           arguments: build
       - name: Release
-        uses: docker://antonyurchenko/git-release:latest
+        uses: SimpleMC/git-release@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DRAFT_RELEASE: "true"
