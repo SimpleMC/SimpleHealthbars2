@@ -17,10 +17,19 @@ jobs:
         uses: eskatos/gradle-command-action@v1
         with:
           arguments: build
+      - name: Extract version
+        uses: frabert/replace-string-action@master
+        id: format-version
+        with:
+          pattern: 'refs/tags/release-([0-9]+.[0-9]+.[0-9]+)'
+          string: ${{ github.ref }}
+          replace-with: '$1'
       - name: Release
         uses: SimpleMC/git-release@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DRAFT_RELEASE: "true"
         with:
-          args: build/libs/simplehealthbars2-*-all.jar
+          args: |
+            build/libs/simplehealthbars2-${{ steps.format-version.outputs.replaced }}.jar
+            build/libs/simplehealthbars2-${{ steps.format-version.outputs.replaced }}-all.jar
