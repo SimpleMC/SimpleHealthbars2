@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Changed
+- Switched from SimpleMC/git-release back to antonyurchenko/git-release for release action
 
 ## [0.1.1] - 2019-12-18
 ### Added

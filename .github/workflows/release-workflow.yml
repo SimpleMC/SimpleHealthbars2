@@ -25,7 +25,7 @@ jobs:
           string: ${{ github.ref }}
           replace-with: '$1'
       - name: Release
-        uses: SimpleMC/git-release@master
+        uses: docker://antonyurchenko/git-release:v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DRAFT_RELEASE: "true"
