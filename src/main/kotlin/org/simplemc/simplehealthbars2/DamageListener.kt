@@ -28,7 +28,7 @@ class DamageListener(
         val source = event.damager as? LivingEntity
 
         // put source and target healthbars
-        healthbar(source, target, event.damage)
+        healthbar(source, target, event.finalDamage)
         source?.let { healthbar(target, it, 0.0) }
     }
 
