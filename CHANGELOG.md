@@ -4,8 +4,10 @@
 
 ## [0.1.2] - 2020-01-24
 ### Changed
-- Fixed Damage listener using incorrect value to calculate health (#11)
 - Switched from SimpleMC/git-release back to antonyurchenko/git-release for release action
+
+### Fixed
+- Fixed Damage listener using incorrect value to calculate health (#11)
 
 ## [0.1.1] - 2019-12-18
 ### Added
