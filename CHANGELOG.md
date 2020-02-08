@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Changed
+- Updated README.md to include actual information
 
 ## [0.1.2] - 2020-01-24
 ### Changed

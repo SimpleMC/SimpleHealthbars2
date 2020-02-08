@@ -1,2 +1,34 @@
 # SimpleHealthbars2
-new and improved
+Simple, easy-to-use healthbar plugin with optional player and mob healthbars
+
+## Features
+
+- Customizable healthbar on the name, scoreboard (below name), or action bar
+- Separate healthbar configurations for players and mobs
+
+## Config Overview
+
+```yaml
+player-bar:
+  type: SCOREBOARD
+  style: ABSOLUTE
+
+mob-bar:
+  type: NAME # healthbar type (AKA location, can be SCOREBOARD, NAME, or ACTION
+  style: BAR # style of healthbar (ABSOLUTE, PERCENT, or BAR)
+  length: 20 # length of the bar (number of characters)
+  char: 0x25ae # character to use for the bar
+  showMobNames: true # if the mob's name should show alongside the healthbar (for NAME or ACTION type)
+```
+
+### Available `type`s
+
+- `SCOREBOARD` - Below-name healthbar using the scoreboard API
+- `NAME` - Updates entity's custom name to include health
+- `ACTION` - Uses a player's action bar to display recently-damaged entity's health
+
+### Available `style`s
+
+- `ABSOLUTE` - Health is displayed as actual health value (hearts)
+- `PERCENT` - Health is displayed as a percentage of max health
+- `BAR` - Health is displayed as a portion of a bar, configured by `length` and `char` properties
