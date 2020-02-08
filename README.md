@@ -14,7 +14,7 @@ player-bar:
   style: ABSOLUTE
 
 mob-bar:
-  type: NAME # healthbar type (AKA location, can be SCOREBOARD, NAME, or ACTION
+  type: NAME # healthbar type (AKA location, can be SCOREBOARD, NAME, or ACTION)
   style: BAR # style of healthbar (ABSOLUTE, PERCENT, or BAR)
   length: 20 # length of the bar (number of characters)
   char: 0x25ae # character to use for the bar
