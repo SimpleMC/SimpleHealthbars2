@@ -25,10 +25,11 @@ jobs:
           string: ${{ github.ref }}
           replace-with: '$1'
       - name: Release
-        uses: docker://antonyurchenko/git-release:v1
+        uses: docker://antonyurchenko/git-release:v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DRAFT_RELEASE: "true"
+          ALLOW_TAG_PREFIX: "true"
         with:
           args: |
             build/libs/simplehealthbars2-${{ steps.format-version.outputs.replaced }}.jar
