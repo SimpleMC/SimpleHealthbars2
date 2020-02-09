@@ -3,10 +3,11 @@
 ## [Unreleased]
 ### Changed
 - Updated README.md to include actual information
+- Update to v3 of anton-yurchenko/git-release action
 
 ## [0.1.2] - 2020-01-24
 ### Changed
-- Switched from SimpleMC/git-release back to antonyurchenko/git-release for release action
+- Switched from SimpleMC/git-release back to anton-yurchenko/git-release for release action
 
 ### Fixed
 - Fixed Damage listener using incorrect value to calculate health (#11)
