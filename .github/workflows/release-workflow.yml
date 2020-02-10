@@ -33,4 +33,4 @@ jobs:
         with:
           args: |
             build/libs/simplehealthbars2-${{ steps.format-version.outputs.replaced }}.jar
-            build/libs/simplehealthbars2-${{ steps.format-version.outputs.replaced }}-all.jar
+            build/libs/simplehealthbars2-${{ steps.format-version.outputs.replaced }}-nokt.jar

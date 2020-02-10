@@ -4,6 +4,8 @@
 ### Changed
 - Updated README.md to include actual information
 - Update to v3 of anton-yurchenko/git-release action
+- Previous `-all` (fat-jar) distribution is now the default jar and added a `-nokt` distribution without the kotlin stdlib.
+  - Users can provide the stdlib on their classpath and avoid every plugin needing to include it.
 
 ## [0.1.2] - 2020-01-24
 ### Changed
