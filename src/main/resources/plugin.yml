@@ -1,6 +1,6 @@
 name: SimpleHealthbars2
 main: org.simplemc.simplehealthbars2.SimpleHealthbars2
-version: 0.1.3
-api-version: "1.15"
+version: 0.1.3-mc-1.14
+api-version: "1.14"
 website: https://github.com/SimpleMC/SimpleHealthbars2
 author: tajobe
