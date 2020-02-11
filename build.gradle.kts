@@ -12,7 +12,7 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint") version "9.1.1"
 }
 
-val mcApiVersion = "1.15"
+val mcApiVersion = "1.14"
 
 group = "org.simplemc"
 version = scmVersion.version

@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Changed
+- `api-version: 1.14` to support MC 1.14
 
 ## [0.1.3] - 2020-02-11
 ### Changed
