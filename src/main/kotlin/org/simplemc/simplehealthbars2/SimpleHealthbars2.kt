@@ -22,8 +22,16 @@ class SimpleHealthbars2 : JavaPlugin() {
 
         listener = DamageListener(
             this,
-            config.getConfigurationSection("player-bar")?.let { loadBar(it) } as PlayerHealthbar?,
-            config.getConfigurationSection("mob-bar")?.let { loadBar(it) } as MobHealthbar?
+            config.getConfigurationSection("player-bar")?.let {
+                loadBar(it)?.let { bar ->
+                    checkNotNull(bar as? PlayerHealthbar) { "Invalid player healthbar type! Must be one of: SCOREBOARD, ACTION" }
+                }
+            },
+            config.getConfigurationSection("mob-bar")?.let {
+                loadBar(it)?.let { bar ->
+                    checkNotNull(bar as? MobHealthbar) { "Invalid mob healthbar type! Must be one of: NAME, ACTION" }
+                }
+            }
         )
 
         server.pluginManager.registerEvents(

@@ -1,6 +1,11 @@
 # Changelog
 
 ## [Unreleased]
+### Changed
+- Updated README for clarity around types and styles valid for a specific configuration
+
+### Fixed
+- Add explicit exception when healthbar `type` is invalid for a specific bar configuration
 
 ## [0.1.3] - 2020-02-11
 ### Changed
