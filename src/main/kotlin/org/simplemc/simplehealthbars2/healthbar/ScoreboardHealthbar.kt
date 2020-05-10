@@ -11,21 +11,39 @@ import org.simplemc.simplehealthbars2.getDamagedHealthRatio
 import kotlin.math.ceil
 
 class ScoreboardHealthbar(private val config: Config) : PlayerHealthbar {
-    data class Config(val style: Healthbar.Style = Healthbar.Style.ABSOLUTE)
+
+    companion object {
+        const val OBJECTIVE_NAME = "simplehealthbar"
+    }
+
+    data class Config(
+        val useMainScoreboard: Boolean = false,
+        val style: Healthbar.Style = Healthbar.Style.ABSOLUTE
+    )
 
     private val objective: Objective
 
     init {
         val scoreboardManager = checkNotNull(Bukkit.getScoreboardManager())
+
+        // clean up previously added objective if it exists
+        scoreboardManager.mainScoreboard.getObjective(OBJECTIVE_NAME)?.unregister()
+
+        val scoreboard = if (config.useMainScoreboard) {
+            scoreboardManager.mainScoreboard
+        } else {
+            scoreboardManager.newScoreboard
+        }
+
         objective = when (config.style) {
-            Healthbar.Style.ABSOLUTE -> scoreboardManager.newScoreboard.registerNewObjective(
-                "healthbar",
+            Healthbar.Style.ABSOLUTE -> scoreboard.registerNewObjective(
+                OBJECTIVE_NAME,
                 "health",
                 "${ChatColor.RED}${0x2764.toChar()}",
                 RenderType.HEARTS
             )
-            Healthbar.Style.PERCENT -> scoreboardManager.newScoreboard.registerNewObjective(
-                "healthbar",
+            Healthbar.Style.PERCENT -> scoreboard.registerNewObjective(
+                OBJECTIVE_NAME,
                 "dummy",
                 "${ChatColor.RED}${0x2764.toChar()}",
                 RenderType.INTEGER
