@@ -12,6 +12,7 @@ Simple, easy-to-use healthbar plugin with optional player and mob healthbars
 player-bar:
   type: SCOREBOARD # healthbar type (AKA location, can be SCOREBOARD or ACTION)
   style: ABSOLUTE # style of healthbar (ABSOLUTE, PERCENT, or BAR)
+  useMainScoreboard: false # use the main scoreboard (true) or a new scoreboard (false)
 
 mob-bar:
   type: NAME # healthbar type (AKA location, can be SCOREBOARD, NAME, or ACTION)

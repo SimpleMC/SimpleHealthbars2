@@ -1,5 +1,6 @@
 package org.simplemc.simplehealthbars2
 
+import org.bukkit.Bukkit
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.plugin.java.JavaPlugin
 import org.simplemc.simplehealthbars2.healthbar.ActionHealthbar
@@ -8,6 +9,7 @@ import org.simplemc.simplehealthbars2.healthbar.MobHealthbar
 import org.simplemc.simplehealthbars2.healthbar.NameHealthbar
 import org.simplemc.simplehealthbars2.healthbar.PlayerHealthbar
 import org.simplemc.simplehealthbars2.healthbar.ScoreboardHealthbar
+import org.simplemc.simplehealthbars2.healthbar.ScoreboardHealthbar.Companion.OBJECTIVE_NAME
 import org.simplemc.simplehealthbars2.healthbar.StringHealthbar
 
 /**
@@ -48,6 +50,7 @@ class SimpleHealthbars2 : JavaPlugin() {
             Healthbar.Type.ACTION -> ActionHealthbar(loadStringBar(config))
             Healthbar.Type.SCOREBOARD -> ScoreboardHealthbar(
                 ScoreboardHealthbar.Config(
+                    useMainScoreboard = config.getBoolean("useMainScoreboard", false),
                     style = Healthbar.Style.valueOf(checkNotNull(config.getString("style", "ABSOLUTE")))
                 )
             )
@@ -63,6 +66,7 @@ class SimpleHealthbars2 : JavaPlugin() {
 
     override fun onDisable() {
         listener.close()
+        Bukkit.getScoreboardManager()?.mainScoreboard?.getObjective(OBJECTIVE_NAME)?.unregister()
         logger.info("${description.name} disabled.")
     }
 }
