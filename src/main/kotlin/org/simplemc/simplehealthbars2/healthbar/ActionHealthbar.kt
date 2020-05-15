@@ -7,6 +7,7 @@ import org.bukkit.entity.Player
 import org.simplemc.simplehealthbars2.getCustomDisplayName
 
 class ActionHealthbar(config: Config) : StringHealthbar(config), PlayerHealthbar, MobHealthbar {
+
     override fun updateHealth(source: LivingEntity?, target: LivingEntity, damage: Double): (() -> Unit)? {
         if (source != null && source is Player) {
             source.spigot().sendMessage(

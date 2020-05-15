@@ -4,14 +4,16 @@ import org.bukkit.ChatColor
 import org.bukkit.entity.LivingEntity
 import org.simplemc.simplehealthbars2.getDamagedHealth
 import org.simplemc.simplehealthbars2.getDamagedHealthRatio
+import java.time.Duration
 
-abstract class StringHealthbar(internal val config: Config) : Healthbar {
+abstract class StringHealthbar(final override val config: Config) : Healthbar {
     data class Config(
-        val style: Healthbar.Style = Healthbar.Style.BAR,
+        override val style: Healthbar.Style = Healthbar.Style.BAR,
+        override val duration: Duration = Duration.ofSeconds(5),
         val length: Int = 20,
         val char: Char = 0x25ae.toChar(),
         val showMobNames: Boolean = true
-    )
+    ) : Healthbar.Config
 
     private val step = config.char.toString()
 

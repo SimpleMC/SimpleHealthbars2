@@ -39,12 +39,14 @@ class DamageListener(
             it.task()
         }
 
-        // update healthbar and schedule its removal task if available
-        when (target) {
+        val healthbar = when (target) {
             is Player -> playerHealthbar
             else -> mobHealthbar
-        }?.updateHealth(source, target, damage)?.let {
-            val taskId = scheduler.scheduleSyncDelayedTask(plugin, it, 100)
+        }
+
+        // update healthbar and schedule its removal task if available
+        healthbar?.updateHealth(source, target, damage)?.let {
+            val taskId = scheduler.scheduleSyncDelayedTask(plugin, it, healthbar.durationTicks)
             removeHealthbarTasks[target.uniqueId] = RemoveHealthbarTask(taskId, it)
         }
     }

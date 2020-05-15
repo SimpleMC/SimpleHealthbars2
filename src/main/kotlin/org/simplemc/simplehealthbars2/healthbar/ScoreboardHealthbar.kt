@@ -8,9 +8,10 @@ import org.bukkit.scoreboard.DisplaySlot
 import org.bukkit.scoreboard.Objective
 import org.bukkit.scoreboard.RenderType
 import org.simplemc.simplehealthbars2.getDamagedHealthRatio
+import java.time.Duration
 import kotlin.math.ceil
 
-class ScoreboardHealthbar(private val config: Config) : PlayerHealthbar {
+class ScoreboardHealthbar(final override val config: Config) : PlayerHealthbar {
 
     companion object {
         const val OBJECTIVE_NAME = "simplehealthbar"
@@ -18,8 +19,9 @@ class ScoreboardHealthbar(private val config: Config) : PlayerHealthbar {
 
     data class Config(
         val useMainScoreboard: Boolean = false,
-        val style: Healthbar.Style = Healthbar.Style.ABSOLUTE
-    )
+        override val style: Healthbar.Style = Healthbar.Style.ABSOLUTE,
+        override val duration: Duration = Duration.ofSeconds(5)
+    ) : Healthbar.Config
 
     private val objective: Objective
 
