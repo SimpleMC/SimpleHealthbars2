@@ -3,6 +3,7 @@
 ## [Unreleased]
 ### Added
 - `useMainScoreboard` config option on `SCOREBOARD` healthbars to configure if it should use the main scoreboard (`true`) or a new one (`false`) (default: `false`)
+- `duration` config option on `NAME` and `SCOREBOARD` healthbars to configure number of seconds the healthbar shows for
 
 ### Changed
 - Updated README for clarity around types and styles valid for a specific configuration
