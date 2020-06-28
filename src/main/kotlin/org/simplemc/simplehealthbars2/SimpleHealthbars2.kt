@@ -53,7 +53,7 @@ class SimpleHealthbars2 : JavaPlugin() {
             }
         }
 
-        logger.info { "Loaded Healthbar configs:\n" +
+        logger.fine { "Loaded Healthbar configs:\n" +
             "Player bars:\n" +
             barsConfigToString(playerHealthbars) +
             "\n\n" +
