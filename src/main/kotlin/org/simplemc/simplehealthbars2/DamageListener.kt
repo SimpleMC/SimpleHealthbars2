@@ -14,8 +14,8 @@ import java.util.UUID
 
 class DamageListener(
     private val plugin: Plugin,
-    private val playerHealthbar: PlayerHealthbar?,
-    private val mobHealthbar: MobHealthbar?
+    private val playerHealthbars: Map<String?, PlayerHealthbar?>,
+    private val mobHealthbars: Map<String?, MobHealthbar?>
 ) : Listener, AutoCloseable {
     private data class RemoveHealthbarTask(val taskId: Int, val task: () -> Unit)
 
@@ -40,8 +40,8 @@ class DamageListener(
         }
 
         val healthbar = when (target) {
-            is Player -> playerHealthbar
-            else -> mobHealthbar
+            is Player -> playerHealthbars[target.world.name] ?: playerHealthbars[null]
+            else -> mobHealthbars[target.world.name] ?: mobHealthbars[null]
         }
 
         // update healthbar and schedule its removal task if available
