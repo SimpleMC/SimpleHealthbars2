@@ -9,6 +9,7 @@ Simple, easy-to-use healthbar plugin with optional player and mob healthbars
 ## Config Overview
 
 ```yaml
+# global defaults
 player-bar:
   type: SCOREBOARD # healthbar type (AKA location, can be SCOREBOARD or ACTION)
   style: ABSOLUTE # style of healthbar (ABSOLUTE, PERCENT, or BAR)
@@ -16,12 +17,23 @@ player-bar:
   duration: 5 # duration (in seconds) of the healthbar (for NAME or SCOREBOARD type)
 
 mob-bar:
-  type: NAME # healthbar type (AKA location, can be SCOREBOARD, NAME, or ACTION)
+  type: NAME # healthbar type (AKA location, can be NAME or ACTION)
   style: BAR # style of healthbar (ABSOLUTE, PERCENT, or BAR)
   length: 20 # length of the bar (number of characters)
   char: 0x25ae # character to use for the bar
   showMobNames: true # if the mob's name should show alongside the healthbar (for NAME or ACTION type)
   duration: 5 # duration (in seconds) of the healthbar (for NAME or SCOREBOARD type)
+
+# per world configs/overrides
+worlds:
+  world: # world name
+    mob-bar:
+      type: ACTION
+      style: BAR
+      length: 20
+      char: 0x25ae
+      showMobNames: true
+      duration: 5
 ```
 
 ### Available `type`s
