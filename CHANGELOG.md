@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+### Changed
+- Switch java target from Java 11 to 1.8
+- Update gradle to 6.5
 
 ## [0.2.0] - 2020-05-17
 ### Added
