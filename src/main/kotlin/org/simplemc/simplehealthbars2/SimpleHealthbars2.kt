@@ -23,40 +23,67 @@ class SimpleHealthbars2 : JavaPlugin() {
         // ensure config file exists
         saveDefaultConfig()
 
-        listener = DamageListener(
-            this,
-            config.getConfigurationSection("player-bar")?.let {
-                loadBar(it)?.let { bar ->
-                    checkNotNull(bar as? PlayerHealthbar) { "Invalid player healthbar type! Must be one of: SCOREBOARD, ACTION" }
+        val playerHealthbars = mutableMapOf<String?, PlayerHealthbar>()
+        loadBar(config.getConfigurationSection("player-bar"))?.let { bar ->
+            playerHealthbars[null] =
+                checkNotNull(bar as? PlayerHealthbar) { "Invalid player healthbar type! Must be one of: SCOREBOARD, ACTION" }
+        }
+
+        val mobHealthbars = mutableMapOf<String?, MobHealthbar>()
+        loadBar(config.getConfigurationSection("mob-bar"))?.let { bar ->
+            mobHealthbars[null] =
+                checkNotNull(bar as? MobHealthbar) { "Invalid mob healthbar type! Must be one of: NAME, ACTION" }
+        }
+
+        config.getConfigurationSection("worlds")?.let { worlds ->
+            worlds.getKeys(false).forEach { worldName ->
+                val worldConfig = worlds.getConfigurationSection(worldName)
+                val playerBar = loadBar(worldConfig?.getConfigurationSection("player-bar"))
+                val mobBar = loadBar(worldConfig?.getConfigurationSection("mob-bar"))
+
+                playerBar?.also { bar ->
+                    playerHealthbars[worldName] =
+                        checkNotNull(bar as? PlayerHealthbar) { "Invalid player healthbar type! Must be one of: SCOREBOARD, ACTION" }
                 }
-            },
-            config.getConfigurationSection("mob-bar")?.let {
-                loadBar(it)?.let { bar ->
-                    checkNotNull(bar as? MobHealthbar) { "Invalid mob healthbar type! Must be one of: NAME, ACTION" }
+
+                mobBar?.also { bar ->
+                    mobHealthbars[worldName] =
+                        checkNotNull(bar as? MobHealthbar) { "Invalid mob healthbar type! Must be one of: NAME, ACTION" }
                 }
             }
-        )
+        }
 
-        server.pluginManager.registerEvents(
-            listener,
-            this
-        )
+        logger.fine { "Loaded Healthbar configs:\n" +
+            "Player bars:\n" +
+            barsConfigToString(playerHealthbars) +
+            "\n\n" +
+            "Mob bars:\n" +
+            barsConfigToString(mobHealthbars) + "\n"
+        }
+
+        listener = DamageListener(this, playerHealthbars, mobHealthbars)
+        server.pluginManager.registerEvents(listener, this)
 
         logger.info("${description.name} version ${description.version} enabled!")
     }
 
-    private fun loadBar(config: ConfigurationSection) =
-        when (Healthbar.Type.valueOf(checkNotNull(config.getString("type")))) {
-            Healthbar.Type.NAME -> NameHealthbar(loadStringBar(config))
-            Healthbar.Type.ACTION -> ActionHealthbar(loadStringBar(config))
-            Healthbar.Type.SCOREBOARD -> ScoreboardHealthbar(
-                ScoreboardHealthbar.Config(
-                    useMainScoreboard = config.getBoolean("useMainScoreboard", false),
-                    style = Healthbar.Style.valueOf(checkNotNull(config.getString("style", "ABSOLUTE"))),
-                    duration = Duration.ofSeconds(config.getLong("duration", 5))
+    private fun barsConfigToString(bars: Map<String?, Healthbar>) =
+        bars.entries.joinToString(separator = "\n") { "World: ${it.key}, Config: ${it.value.config}" }.prependIndent()
+
+    private fun loadBar(config: ConfigurationSection?) =
+        config?.let {
+            when (Healthbar.Type.valueOf(checkNotNull(config.getString("type")))) {
+                Healthbar.Type.NAME -> NameHealthbar(loadStringBar(config))
+                Healthbar.Type.ACTION -> ActionHealthbar(loadStringBar(config))
+                Healthbar.Type.SCOREBOARD -> ScoreboardHealthbar(
+                    ScoreboardHealthbar.Config(
+                        useMainScoreboard = config.getBoolean("useMainScoreboard", false),
+                        style = Healthbar.Style.valueOf(checkNotNull(config.getString("style", "ABSOLUTE"))),
+                        duration = Duration.ofSeconds(config.getLong("duration", 5))
+                    )
                 )
-            )
-            Healthbar.Type.NONE -> null
+                Healthbar.Type.NONE -> null
+            }
         }
 
     private fun loadStringBar(config: ConfigurationSection) = StringHealthbar.Config(

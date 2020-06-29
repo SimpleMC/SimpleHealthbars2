@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Add optional per-world healthbar config
+
 ### Changed
 - Switch java target from Java 11 to 1.8
 - Update gradle to 6.5
