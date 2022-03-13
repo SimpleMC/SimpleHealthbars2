@@ -25,14 +25,16 @@ class SimpleHealthbars2 : JavaPlugin() {
 
         val playerHealthbars = mutableMapOf<String?, PlayerHealthbar>()
         loadBar(config.getConfigurationSection("player-bar"))?.let { bar ->
-            playerHealthbars[null] =
-                checkNotNull(bar as? PlayerHealthbar) { "Invalid player healthbar type! Must be one of: SCOREBOARD, ACTION" }
+            playerHealthbars[null] = checkNotNull(bar as? PlayerHealthbar) {
+                "Invalid player healthbar type! Must be one of: SCOREBOARD, ACTION"
+            }
         }
 
         val mobHealthbars = mutableMapOf<String?, MobHealthbar>()
         loadBar(config.getConfigurationSection("mob-bar"))?.let { bar ->
-            mobHealthbars[null] =
-                checkNotNull(bar as? MobHealthbar) { "Invalid mob healthbar type! Must be one of: NAME, ACTION" }
+            mobHealthbars[null] = checkNotNull(bar as? MobHealthbar) {
+                "Invalid mob healthbar type! Must be one of: NAME, ACTION"
+            }
         }
 
         config.getConfigurationSection("worlds")?.let { worlds ->
@@ -42,23 +44,29 @@ class SimpleHealthbars2 : JavaPlugin() {
                 val mobBar = loadBar(worldConfig?.getConfigurationSection("mob-bar"))
 
                 playerBar?.also { bar ->
-                    playerHealthbars[worldName] =
-                        checkNotNull(bar as? PlayerHealthbar) { "Invalid player healthbar type! Must be one of: SCOREBOARD, ACTION" }
+                    playerHealthbars[worldName] = checkNotNull(bar as? PlayerHealthbar) {
+                        "Invalid player healthbar type! Must be one of: SCOREBOARD, ACTION"
+                    }
                 }
 
                 mobBar?.also { bar ->
-                    mobHealthbars[worldName] =
-                        checkNotNull(bar as? MobHealthbar) { "Invalid mob healthbar type! Must be one of: NAME, ACTION" }
+                    mobHealthbars[worldName] = checkNotNull(bar as? MobHealthbar) {
+                        "Invalid mob healthbar type! Must be one of: NAME, ACTION"
+                    }
                 }
             }
         }
 
-        logger.fine { "Loaded Healthbar configs:\n" +
-            "Player bars:\n" +
-            barsConfigToString(playerHealthbars) +
-            "\n\n" +
-            "Mob bars:\n" +
-            barsConfigToString(mobHealthbars) + "\n"
+        logger.fine {
+            """
+                Loaded Healthbar configs:
+                Player bars:
+                ${barsConfigToString(playerHealthbars)}
+                
+                Mob bars:
+                ${barsConfigToString(mobHealthbars)}
+                
+            """.trimIndent()
         }
 
         listener = DamageListener(this, playerHealthbars, mobHealthbars)
