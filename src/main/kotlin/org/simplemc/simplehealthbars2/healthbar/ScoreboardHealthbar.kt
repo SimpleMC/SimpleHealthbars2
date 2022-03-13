@@ -11,7 +11,7 @@ import org.simplemc.simplehealthbars2.getDamagedHealthRatio
 import java.time.Duration
 import kotlin.math.ceil
 
-class ScoreboardHealthbar(final override val config: Config) : PlayerHealthbar {
+class ScoreboardHealthbar(override val config: Config) : PlayerHealthbar {
 
     companion object {
         const val OBJECTIVE_NAME = "simplehealthbar"
@@ -63,8 +63,7 @@ class ScoreboardHealthbar(final override val config: Config) : PlayerHealthbar {
             target.scoreboard = checkNotNull(objective.scoreboard)
 
             if (config.style == Healthbar.Style.PERCENT) {
-                objective.getScore(target.name).score =
-                        ceil(target.getDamagedHealthRatio(damage) * 100).toInt()
+                objective.getScore(target.name).score = ceil(target.getDamagedHealthRatio(damage) * 100).toInt()
             }
 
             return { target.scoreboard = oldScoreboard }

@@ -5,8 +5,9 @@
 - Add optional per-world healthbar config
 
 ### Changed
-- Switch java target from Java 11 to 1.8
-- Update gradle to 6.5
+- Update gradle to 7.4
+- Update to Spigot/MC 1.18
+- Update to Java 17
 
 ## [0.2.0] - 2020-05-17
 ### Added
