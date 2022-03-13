@@ -18,7 +18,7 @@ group = "org.simplemc"
 version = scmVersion.version
 
 scmVersion {
-    versionIncrementer("incrementMinorIfNotOnRelease", mapOf(releaseBranchPattern to "v.*"))
+    versionIncrementer("incrementMinorIfNotOnRelease", mapOf("releaseBranchPattern" to "v.*"))
 
     hooks(
         closureOf<HooksConfig> {
