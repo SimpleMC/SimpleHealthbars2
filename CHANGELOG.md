@@ -1,6 +1,10 @@
 # Changelog
 
 ## [Unreleased]
+### Changed
+- Merged template SimpleMC/mc-kotlin-plugin-template
+- MC 1.19, Kotlin 1.8, Gradle 8
+- Release tag prefix changed from `release-` to `v`
 
 ## [0.3.0] - 2022-03-13
 ### Added
