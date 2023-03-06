@@ -5,7 +5,7 @@ import org.simplemc.simplehealthbars2.getCustomDisplayName
 import org.simplemc.simplehealthbars2.setCustomDisplayName
 
 class NameHealthbar(config: Config) : StringHealthbar(config), MobHealthbar {
-    override fun updateHealth(source: LivingEntity?, target: LivingEntity, damage: Double): (() -> Unit)? {
+    override fun updateHealth(source: LivingEntity?, target: LivingEntity, damage: Double): (() -> Unit) {
         val hadCustomName = target.isCustomNameVisible
         val oldName = target.getCustomDisplayName()
 

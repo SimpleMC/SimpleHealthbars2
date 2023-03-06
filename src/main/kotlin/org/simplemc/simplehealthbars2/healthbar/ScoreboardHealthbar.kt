@@ -4,6 +4,7 @@ import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import org.bukkit.scoreboard.Criteria
 import org.bukkit.scoreboard.DisplaySlot
 import org.bukkit.scoreboard.Objective
 import org.bukkit.scoreboard.RenderType
@@ -40,13 +41,13 @@ class ScoreboardHealthbar(override val config: Config) : PlayerHealthbar {
         objective = when (config.style) {
             Healthbar.Style.ABSOLUTE -> scoreboard.registerNewObjective(
                 OBJECTIVE_NAME,
-                "health",
+                Criteria.HEALTH,
                 "${ChatColor.RED}${0x2764.toChar()}",
                 RenderType.HEARTS
             )
             Healthbar.Style.PERCENT -> scoreboard.registerNewObjective(
                 OBJECTIVE_NAME,
-                "dummy",
+                Criteria.DUMMY,
                 "${ChatColor.RED}${0x2764.toChar()}",
                 RenderType.INTEGER
             )
