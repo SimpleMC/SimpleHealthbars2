@@ -4,3 +4,5 @@ version: "${version}"
 api-version: "${apiVersion}"
 website: https://github.com/SimpleMC/SimpleHealthbars2
 author: tajobe
+libraries:
+  - org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}

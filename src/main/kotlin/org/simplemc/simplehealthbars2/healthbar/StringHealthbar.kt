@@ -5,6 +5,7 @@ import org.bukkit.entity.LivingEntity
 import org.simplemc.simplehealthbars2.getDamagedHealth
 import org.simplemc.simplehealthbars2.getDamagedHealthRatio
 import java.time.Duration
+import kotlin.math.ceil
 
 abstract class StringHealthbar(final override val config: Config) : Healthbar {
     data class Config(
@@ -19,9 +20,9 @@ abstract class StringHealthbar(final override val config: Config) : Healthbar {
 
     internal fun formatHealthbar(target: LivingEntity, oldName: String, damage: Double): String {
         var health = when (config.style) {
-            Healthbar.Style.ABSOLUTE -> healthAmount(Math.ceil(target.getDamagedHealth(damage)).toInt())
-            Healthbar.Style.PERCENT -> healthAmount(Math.ceil(target.getDamagedHealthRatio(damage) * 100).toInt())
-            Healthbar.Style.BAR -> healthBar(Math.ceil(target.getDamagedHealthRatio(damage) * config.length).toInt())
+            Healthbar.Style.ABSOLUTE -> healthAmount(ceil(target.getDamagedHealth(damage)).toInt())
+            Healthbar.Style.PERCENT -> healthAmount(ceil(target.getDamagedHealthRatio(damage) * 100).toInt())
+            Healthbar.Style.BAR -> healthBar(ceil(target.getDamagedHealthRatio(damage) * config.length).toInt())
         }
 
         if (target.isCustomNameVisible || config.showMobNames) {
