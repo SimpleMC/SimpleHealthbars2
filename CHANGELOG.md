@@ -1,6 +1,11 @@
 # Changelog
 
 ## [Unreleased]
+### Changed
+- MC 1.21, Kotlin 2.1, Gradle 8.12 (@tajobe)
+
+### Fixed
+- Prevent name healthbar from overwriting name tags (@tajobe)
 
 ## [0.3.1] - 2023-03-08
 ### Changed

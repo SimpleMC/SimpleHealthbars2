@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.plugin.Plugin
 import org.simplemc.simplehealthbars2.healthbar.MobHealthbar
 import org.simplemc.simplehealthbars2.healthbar.PlayerHealthbar
@@ -15,7 +16,7 @@ import java.util.UUID
 class DamageListener(
     private val plugin: Plugin,
     private val playerHealthbars: Map<String?, PlayerHealthbar?>,
-    private val mobHealthbars: Map<String?, MobHealthbar?>
+    private val mobHealthbars: Map<String?, MobHealthbar?>,
 ) : Listener, AutoCloseable {
     private data class RemoveHealthbarTask(val taskId: Int, val task: () -> Unit)
 
@@ -30,6 +31,17 @@ class DamageListener(
         // put source and target healthbars
         healthbar(source, target, event.finalDamage)
         source?.let { healthbar(target, it, 0.0) }
+    }
+
+    /**
+     * Remove the healthbar from dying entities immediately
+     */
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    fun onEntityDeathEvent(event: EntityDeathEvent) {
+        removeHealthbarTasks[event.entity.uniqueId]?.let {
+            scheduler.cancelTask(it.taskId)
+            it.task()
+        }
     }
 
     private fun healthbar(source: LivingEntity?, target: LivingEntity, damage: Double) {

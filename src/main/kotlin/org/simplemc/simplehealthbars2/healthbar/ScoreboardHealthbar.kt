@@ -21,7 +21,7 @@ class ScoreboardHealthbar(override val config: Config) : PlayerHealthbar {
     data class Config(
         val useMainScoreboard: Boolean = false,
         override val style: Healthbar.Style = Healthbar.Style.ABSOLUTE,
-        override val duration: Duration = Duration.ofSeconds(5)
+        override val duration: Duration = Duration.ofSeconds(5),
     ) : Healthbar.Config
 
     private val objective: Objective
@@ -43,13 +43,13 @@ class ScoreboardHealthbar(override val config: Config) : PlayerHealthbar {
                 OBJECTIVE_NAME,
                 Criteria.HEALTH,
                 "${ChatColor.RED}${0x2764.toChar()}",
-                RenderType.HEARTS
+                RenderType.HEARTS,
             )
             Healthbar.Style.PERCENT -> scoreboard.registerNewObjective(
                 OBJECTIVE_NAME,
                 Criteria.DUMMY,
                 "${ChatColor.RED}${0x2764.toChar()}",
-                RenderType.INTEGER
+                RenderType.INTEGER,
             )
             Healthbar.Style.BAR ->
                 throw IllegalArgumentException("BAR healthbar style not valid for scoreboard healthbar!")

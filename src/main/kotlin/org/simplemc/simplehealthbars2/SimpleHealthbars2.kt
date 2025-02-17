@@ -87,8 +87,8 @@ class SimpleHealthbars2 : JavaPlugin() {
                     ScoreboardHealthbar.Config(
                         useMainScoreboard = config.getBoolean("useMainScoreboard", false),
                         style = Healthbar.Style.valueOf(checkNotNull(config.getString("style", "ABSOLUTE"))),
-                        duration = Duration.ofSeconds(config.getLong("duration", 5))
-                    )
+                        duration = Duration.ofSeconds(config.getLong("duration", 5)),
+                    ),
                 )
                 Healthbar.Type.NONE -> null
             }
@@ -99,7 +99,7 @@ class SimpleHealthbars2 : JavaPlugin() {
         duration = Duration.ofSeconds(config.getLong("duration", 5)),
         length = config.getInt("length", 20),
         char = config.getInt("char", 0x25ae).toChar(),
-        showMobNames = config.getBoolean("showMobNames", true)
+        showMobNames = config.getBoolean("showMobNames", true),
     )
 
     override fun onDisable() {
