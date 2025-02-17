@@ -4,7 +4,7 @@ import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
-import org.simplemc.simplehealthbars2.getCustomDisplayName
+import org.simplemc.simplehealthbars2.getDisplayName
 
 class ActionHealthbar(config: Config) : StringHealthbar(config), PlayerHealthbar, MobHealthbar {
 
@@ -12,7 +12,7 @@ class ActionHealthbar(config: Config) : StringHealthbar(config), PlayerHealthbar
         if (source != null && source is Player) {
             source.spigot().sendMessage(
                 ChatMessageType.ACTION_BAR,
-                *TextComponent.fromLegacyText(formatHealthbar(target, target.getCustomDisplayName(), damage))
+                TextComponent.fromLegacy(formatHealthbar(target, target.getDisplayName(), damage)),
             )
         }
 
