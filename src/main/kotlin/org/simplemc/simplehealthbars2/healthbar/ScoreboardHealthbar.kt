@@ -21,7 +21,7 @@ class ScoreboardHealthbar(override val config: Config) : PlayerHealthbar {
     data class Config(
         val useMainScoreboard: Boolean = false,
         override val style: Healthbar.Style = Healthbar.Style.ABSOLUTE,
-        override val duration: Duration = Duration.ofSeconds(5),
+        override val duration: Duration? = Duration.ofSeconds(5),
     ) : Healthbar.Config
 
     private val objective: Objective

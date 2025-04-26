@@ -8,7 +8,11 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDeathEvent
+import org.bukkit.event.entity.EntitySpawnEvent
+import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.plugin.Plugin
+import org.simplemc.simplehealthbars2.healthbar.Healthbar
 import org.simplemc.simplehealthbars2.healthbar.MobHealthbar
 import org.simplemc.simplehealthbars2.healthbar.PlayerHealthbar
 import java.util.UUID
@@ -18,10 +22,31 @@ class DamageListener(
     private val playerHealthbars: Map<String?, PlayerHealthbar?>,
     private val mobHealthbars: Map<String?, MobHealthbar?>,
 ) : Listener, AutoCloseable {
-    private data class RemoveHealthbarTask(val taskId: Int, val task: () -> Unit)
+    private data class RemoveHealthbarTask(val taskId: Int?, val removeAction: () -> Unit)
 
     private val scheduler = Bukkit.getScheduler()
     private val removeHealthbarTasks: MutableMap<UUID, RemoveHealthbarTask?> = mutableMapOf()
+
+    // <editor-fold desc="Set always on healthbards on spawn/join">
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    fun onEntitySpawn(event: EntitySpawnEvent) {
+        val entity = event.entity as? LivingEntity
+        entity?.healthbar?.let { healthbar ->
+            if (healthbar.durationTicks == null) {
+                healthbar(null, entity, 0.0)
+            }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    fun onPlayerJoin(event: PlayerJoinEvent) {
+        event.player.healthbar?.let { healthbar ->
+            if (healthbar.durationTicks == null) {
+                healthbar(null, event.player, 0.0)
+            }
+        }
+    }
+    // </editor-fold>
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     fun onEntityDamageEvent(event: EntityDamageByEntityEvent) {
@@ -33,33 +58,39 @@ class DamageListener(
         source?.let { healthbar(target, it, 0.0) }
     }
 
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    fun onPlayerQuit(event: PlayerQuitEvent) = clearEntityHealthbar(event.player)
+
     /**
      * Remove the healthbar from dying entities immediately
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    fun onEntityDeathEvent(event: EntityDeathEvent) {
-        removeHealthbarTasks[event.entity.uniqueId]?.let {
-            scheduler.cancelTask(it.taskId)
-            it.task()
-        }
-    }
+    fun onEntityDeathEvent(event: EntityDeathEvent) = clearEntityHealthbar(event.entity)
 
     private fun healthbar(source: LivingEntity?, target: LivingEntity, damage: Double) {
         // cancel scheduled healthbar removal and run it now to prepare for new (updated) healthbar
-        removeHealthbarTasks[target.uniqueId]?.let {
-            scheduler.cancelTask(it.taskId)
-            it.task()
+        clearEntityHealthbar(target)
+
+        // update healthbar and schedule its removal task if necessary
+        val healthbar = target.healthbar
+        healthbar?.updateHealth(source, target, damage)?.let { removeAction ->
+            val taskId = healthbar.durationTicks?.let { ticks ->
+                scheduler.scheduleSyncDelayedTask(plugin, removeAction, ticks)
+            }
+            removeHealthbarTasks[target.uniqueId] = RemoveHealthbarTask(taskId, removeAction)
+        }
+    }
+
+    private val LivingEntity.healthbar: Healthbar?
+        get(): Healthbar? = when (this) {
+            is Player -> playerHealthbars[world.name] ?: playerHealthbars[null]
+            else -> mobHealthbars[world.name] ?: mobHealthbars[null]
         }
 
-        val healthbar = when (target) {
-            is Player -> playerHealthbars[target.world.name] ?: playerHealthbars[null]
-            else -> mobHealthbars[target.world.name] ?: mobHealthbars[null]
-        }
-
-        // update healthbar and schedule its removal task if available
-        healthbar?.updateHealth(source, target, damage)?.let {
-            val taskId = scheduler.scheduleSyncDelayedTask(plugin, it, healthbar.durationTicks)
-            removeHealthbarTasks[target.uniqueId] = RemoveHealthbarTask(taskId, it)
+    private fun clearEntityHealthbar(entity: LivingEntity) {
+        removeHealthbarTasks.remove(entity.uniqueId)?.let {
+            it.taskId?.let { taskId -> scheduler.cancelTask(taskId) }
+            it.removeAction()
         }
     }
 
@@ -67,8 +98,6 @@ class DamageListener(
      * Remember to remove all healthbars on close
      */
     override fun close() {
-        removeHealthbarTasks
-            .mapNotNull { (_, removeTask) -> removeTask?.task }
-            .forEach { it() }
+        removeHealthbarTasks.forEach { (_, removeTask) -> removeTask?.removeAction() }
     }
 }

@@ -10,7 +10,7 @@ import kotlin.math.ceil
 abstract class StringHealthbar(final override val config: Config) : Healthbar {
     data class Config(
         override val style: Healthbar.Style = Healthbar.Style.BAR,
-        override val duration: Duration = Duration.ofSeconds(5),
+        override val duration: Duration? = Duration.ofSeconds(5),
         val length: Int = 20,
         val char: Char = 0x25ae.toChar(),
         val showMobNames: Boolean = true,
