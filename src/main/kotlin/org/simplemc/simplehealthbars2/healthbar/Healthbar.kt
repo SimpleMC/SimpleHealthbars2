@@ -9,12 +9,12 @@ interface Healthbar {
 
     interface Config {
         val style: Style
-        val duration: Duration
+        val duration: Duration?
     }
 
     val config: Config
-    val durationTicks: Long
-        get() = config.duration.seconds * 20
+    val durationTicks: Long?
+        get() = config.duration?.seconds?.times(20)
 
     /**
      * Update target's healthbar with latest health

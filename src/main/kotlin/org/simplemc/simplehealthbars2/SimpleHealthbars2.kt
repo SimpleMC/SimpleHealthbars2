@@ -62,10 +62,10 @@ class SimpleHealthbars2 : JavaPlugin() {
                 Loaded Healthbar configs:
                 Player bars:
                 ${barsConfigToString(playerHealthbars)}
-                
+
                 Mob bars:
                 ${barsConfigToString(mobHealthbars)}
-                
+
             """.trimIndent()
         }
 
@@ -87,7 +87,7 @@ class SimpleHealthbars2 : JavaPlugin() {
                     ScoreboardHealthbar.Config(
                         useMainScoreboard = config.getBoolean("useMainScoreboard", false),
                         style = Healthbar.Style.valueOf(checkNotNull(config.getString("style", "ABSOLUTE"))),
-                        duration = Duration.ofSeconds(config.getLong("duration", 5)),
+                        duration = loadBarDuration(config),
                     ),
                 )
                 Healthbar.Type.NONE -> null
@@ -96,11 +96,19 @@ class SimpleHealthbars2 : JavaPlugin() {
 
     private fun loadStringBar(config: ConfigurationSection) = StringHealthbar.Config(
         style = Healthbar.Style.valueOf(checkNotNull(config.getString("style", "BAR"))),
-        duration = Duration.ofSeconds(config.getLong("duration", 5)),
+        duration = loadBarDuration(config),
         length = config.getInt("length", 20),
         char = config.getInt("char", 0x25ae).toChar(),
         showMobNames = config.getBoolean("showMobNames", true),
     )
+
+    private fun loadBarDuration(config: ConfigurationSection): Duration? = config.getString("duration").let {
+        if (it == "always") {
+            null
+        } else {
+            Duration.ofSeconds(it?.toLongOrNull() ?: 5L)
+        }
+    }
 
     override fun onDisable() {
         listener.close()
