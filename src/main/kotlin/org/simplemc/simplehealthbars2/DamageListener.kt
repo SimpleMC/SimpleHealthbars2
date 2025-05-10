@@ -27,7 +27,7 @@ class DamageListener(
     private val scheduler = Bukkit.getScheduler()
     private val removeHealthbarTasks: MutableMap<UUID, RemoveHealthbarTask?> = mutableMapOf()
 
-    // <editor-fold desc="Set always on healthbards on spawn/join">
+    // <editor-fold desc="Set always on healthbars on spawn/join">
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     fun onEntitySpawn(event: EntitySpawnEvent) {
         val entity = event.entity as? LivingEntity
@@ -49,7 +49,7 @@ class DamageListener(
     // </editor-fold>
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    fun onEntityDamageEvent(event: EntityDamageByEntityEvent) {
+    fun onEntityDamageByEntityEvent(event: EntityDamageByEntityEvent) {
         val target = event.entity as? LivingEntity ?: return
         val source = event.damager as? LivingEntity
 
