@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.entity.EntitySpawnEvent
 import org.bukkit.event.player.PlayerJoinEvent
@@ -30,8 +31,8 @@ class DamageListener(
     // <editor-fold desc="Set always on healthbars on spawn/join">
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     fun onEntitySpawn(event: EntitySpawnEvent) {
-        val entity = event.entity as? LivingEntity
-        entity?.healthbar?.let { healthbar ->
+        val entity = event.entity as? LivingEntity ?: return
+        entity.healthbar?.let { healthbar ->
             if (healthbar.durationTicks == null) {
                 healthbar(null, entity, 0.0)
             }
@@ -48,14 +49,29 @@ class DamageListener(
     }
     // </editor-fold>
 
+    /**
+     * Update healthbars as needed
+     *
+     * Damage from other entities may create a healthbar if configured.
+     * Other damage can only update existing healthbars.
+     */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    fun onEntityDamageByEntityEvent(event: EntityDamageByEntityEvent) {
+    fun onEntityDamageEvent(event: EntityDamageEvent) {
         val target = event.entity as? LivingEntity ?: return
-        val source = event.damager as? LivingEntity
+        when (event) {
+            is EntityDamageByEntityEvent -> {
+                val source = event.damager as? LivingEntity
 
-        // put source and target healthbars
-        healthbar(source, target, event.finalDamage)
-        source?.let { healthbar(target, it, 0.0) }
+                // put source and target healthbars
+                healthbar(source, target, event.finalDamage)
+                source?.let { healthbar(target, it, 0.0) }
+            }
+            else -> {
+                if (removeHealthbarTasks.contains(event.entity.uniqueId)) {
+                    healthbar(null, target, event.finalDamage)
+                }
+            }
+        }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
