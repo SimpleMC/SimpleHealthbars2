@@ -14,7 +14,7 @@ player-bar:
   type: SCOREBOARD # healthbar type (AKA location, can be SCOREBOARD or ACTION)
   style: ABSOLUTE # style of healthbar (ABSOLUTE, PERCENT, or BAR)
   useMainScoreboard: false # use the main scoreboard (true) or a new scoreboard (false)
-  duration: 5 # duration (in seconds) of the healthbar (for NAME or SCOREBOARD type)
+  duration: 5 # duration (in seconds) of the healthbar, or `always` (for NAME or SCOREBOARD type)
 
 mob-bar:
   type: NAME # healthbar type (AKA location, can be NAME or ACTION)
@@ -22,7 +22,7 @@ mob-bar:
   length: 20 # length of the bar (number of characters)
   char: 0x25ae # character to use for the bar
   showMobNames: true # if the mob's name should show alongside the healthbar (for NAME or ACTION type)
-  duration: 5 # duration (in seconds) of the healthbar (for NAME or SCOREBOARD type)
+  duration: 5 # duration (in seconds) of the healthbar, or `always` (for NAME or SCOREBOARD type)
 
 # per world configs/overrides
 worlds:

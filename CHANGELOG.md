@@ -5,6 +5,9 @@
 ### Added
 - GH-22: Always on healthbars for NAME or SCOREBOARD via special-case `always` duration (@tajobe)
 
+### Fixed
+- GH-29: Update health for existing bars on all damage events (@tajobe)
+
 ## [0.4.0] - 2025-02-17
 ### Changed
 - MC 1.21, Kotlin 2.1, Gradle 8.12 (@tajobe)
