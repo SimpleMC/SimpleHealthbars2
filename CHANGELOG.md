@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.5.0] - 2025-05-17
+
 ### Added
 - GH-22: Always on healthbars for NAME or SCOREBOARD via special-case `always` duration (@tajobe)
 
@@ -66,7 +68,8 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-[Unreleased]: https://github.com/SimpleMC/SimpleHealthbars2/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/SimpleMC/SimpleHealthbars2/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/SimpleMC/SimpleHealthbars2/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/SimpleMC/SimpleHealthbars2/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/SimpleMC/SimpleHealthbars2/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/SimpleMC/SimpleHealthbars2/compare/release-0.2.0...release-0.3.0
